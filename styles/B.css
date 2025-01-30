@@ -1,0 +1,301 @@
+#store {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* خانتين بجانب بعض */
+  gap: 10px;
+  padding: 10px;
+  width: 95%; /* عرض الحاوية 95% من الشاشة */
+  margin: 0 auto; /* توسيط الحاوية */
+}
+
+.purchase-item {
+  border-radius: 25px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
+  transition: transform 0.5s;
+  overflow: hidden; /* لضمان احتواء المحتوى */
+}
+
+.purchase-item:hover {
+  transform: scale(1.05);
+}
+
+.purchase-item img {
+  width: 100%; /* تأخذ عرض الحاوية بالكامل */
+  height: auto; /* الحفاظ على نسبة العرض إلى الارتفاع */
+  border-radius: 25px;
+/* border-top-right-radius: 25px;*/
+}
+
+.purchase-item p {
+  margin: 10px 0 0;
+  white-space: nowrap; /* منع كسر النص */
+  overflow: hidden;
+  text-overflow: ellipsis; /* قص النص إذا كان طويلاً */
+  font-size: 14px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  margin-top: 10px; 
+  margin-bottom: 10px; 
+  justify-content: center;
+  gap: 5px; /* مسافة بين النص والأيقونة */
+}
+
+.purchase-item p i {
+  color: #00acee; /* لون الأيقونة (تلجرام) */
+  font-size: 18px;
+}
+
+
+
+
+#upgradeContainer {
+    display: flex;
+    flex-direction: row-reverse; /* عرض العناصر من اليمين إلى اليسار */
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 35px; /* زوايا مستديرة */
+    border: 0.7px solid #101010;
+    width: 80%;
+    height: 25px;
+    margin: 20px auto; 
+}
+
+#upgradeCost,
+#currentLevel,
+#currentCoins {
+    white-space: nowrap;
+    margin-right: 10px;
+    margin-left: 10px; /* يمكنك تغيير القيمة حسب المسافة التي تريدها */
+    padding: 0;
+    text-align: center;
+    font-size: 12px;
+}
+
+
+#boos-txt {
+    text-shadow: 2px 2px #181818;
+    font-size: 22px;
+    color: #fff; /* تأكد من أن النص يظهر بوضوح على الصورة */
+    z-index: 100; /* تأكد من أن النص فوق الصورة */
+    animation: popIn 0.4s ease forwards;
+    text-align: left;
+    margin-top: 0;
+    margin-left: 15px;
+    margin-bottom: 10px; /* يمكنك تغيير القيمة حسب المسافة التي تريدها */
+    font-weight: bold;
+}
+
+#upgradeTitle {
+    font-size: 20px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+#upgradeIconContainer {
+    display: flex;
+    justify-content: space-around; /* توزيع العناصر بشكل متساوٍ */
+    align-items: center; /* محاذاة العناصر بشكل عمودي */
+    gap: 15px; /* مسافة بين العناصر */
+    margin-top: 20px;
+}
+
+/*#upgradeCost {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+#currentLevel,
+#currentCoins {
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    font-size: 13px;
+}*/
+
+
+.badgee {
+  position: absolute;
+  top: 40px;
+  left: 0; /* To position the badge at the left side */
+  background: linear-gradient(45deg, #3b0a45, #2f4f4f, #000000);
+  color: white;
+  padding: 4px 80px;
+  font-weight: bold;
+  transform: rotate(-80deg); /* Make the badge slant */
+  transform-origin: left top; /* Ensure rotation starts from the left top corner */
+  text-transform: uppercase;
+}
+
+.bos-image {
+   /* position: absolute; 
+    top: 65px; 
+    left: 50%;
+    transform: translateX(-50%);*/
+    width: 150px;
+    height: auto;
+    margin: 10px auto;
+    display: block;
+    margin-bottom: 10px;
+} 
+
+/* النصوص العامة */
+.coin-label {
+    margin-left: 4px; /* مسافة بين الرقم والنص */
+    font-size: 14px; /* حجم الخط */
+    color: #808080; /* لون النص */
+}
+
+.separatorrr, .separ{
+    width: 0.50px;
+    height: 20px;
+    background-color: #101010;
+    margin: 0 5px;
+} 
+
+.separatorrrr {
+    width: 0.5px;
+    height: 10px;
+    background-color: #808080;
+    margin: 0 5px;
+}
+
+/* أيقونات */
+.boos-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.boosts-button img {
+    vertical-align: middle;
+}
+
+.boosts-button {
+    display: flex; /* يتيح ترتيب الأيقونة والنص بجانب بعض */
+    align-items: center; /* يجعل الأيقونة والنص متوسطي المحاذاة عموديًا */
+    margin-left: 40px;
+    font-size: 16.5px;
+    color: #fff;
+    font-weight: bold;
+    background-color: #000;
+    border-radius: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    padding: 8px 12px; /* مسافات داخلية لتجميل الزر */
+    gap: 6px; /* مسافة ثابتة بين الأيقونة والنص */
+}
+
+.size-Boosts {
+    width: 20px; /* عرض الأيقونة */
+    height: 20px; /* ارتفاع الأيقونة */
+    flex-shrink: 0; /* يمنع تصغير الأيقونة */
+} 
+
+
+.boost-item button {
+    margin-right: 0; 
+   /* background-color: rgba(0, 0, 0, 0.7);*/
+    background-color: rgba(255, 255, 255, 0.004);
+    color: #808080;
+    padding: 3px;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 10%; /* عرض الزر */
+    font-size: 13px;
+    font-weight: bold;
+   /* border: 0.5px solid #343434;*/
+    text-align: right;
+    transition: background-color 0.3s ease;
+}
+
+/* النصوص */
+#b, #pr {
+    text-align: left;
+    font-size: 13px;
+    margin-bottom: 0;
+    margin-left: 15px;
+    color: #808080;
+}
+
+/* الحاوية الرئيسية */
+.boosts-container {
+    position: relative;
+    display: flex;
+    flex-direction: column; /* ترتيب العناصر عموديًا */
+    align-items: center; /* محاذاة الحاويات في المنتصف أفقيًا */
+    justify-content: space-between; /* محاذاة العناصر في منتصف الصفحة */
+    width: 100%; 
+    margin-top: 15px;
+    z-index: 2; 
+}
+
+/* العنصر الفردي */
+.boost-item {
+    display: flex;
+    flex-direction: row; /* ترتيب المحتوى داخل العنصر أفقيًا */
+    align-items: center; /* محاذاة المحتوى عموديًا */
+    justify-content: space-between; /* توزيع العناصر بالتساوي */
+    width: 98%; /* عرض العنصر */
+    height: 62px;
+    padding: 10px;
+    margin: 6px auto;
+    /*border-bottom: 1px solid #1c1c1c;
+    border-right: 1px solid #1c1c1c;
+    background: #101010;*/
+    border-radius: 25px; /* زوايا مستديرة */
+    box-sizing: border-box; /* لحساب الحواف ضمن الأبعاد */
+    overflow: hidden;
+    white-space: nowrap;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+}
+
+.boost-title {
+    margin-left: 3px;
+    /*margin: 0;*/ /* إزالة المسافات بين النصوص */
+    color: #fff;
+    font-size: 13px;
+    line-height: 1.5;
+} 
+
+.icon-boosts { 
+    /*margin-bottom: 20px;*/ /* يمكنك تغيير القيمة حسب المسافة التي تريدها */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 25px;
+    transition: box-shadow 0.3s ease;
+} 
+
+.boost-item img { 
+    width: 40px;
+    height: 40px;
+    box-shadow: 0 0 3px rgba(255, 255, 255, 0.5), 0 0 6px rgba(255, 255, 255, 0.3), 0 0 9px rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    transition: box-shadow 0.3s ease;
+}
+
+.boost-icon:hover {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6), 0 0 20px rgba(255, 255, 255, 0.4), 0 0 30px rgba(255, 255, 255, 0.3);
+}
+
+
+.boost-meta {
+    margin-right: 85px;
+    margin-top: 5px;
+    display: flex;
+    flex-direction: row; /* ترتيب الليفيل والتكلفة أفقيًا */
+    justify-content: space-between; /* توزيع العناصر بالتساوي */
+    color: #808080;
+    font-weight: 500; 
+    font-size: 11px; /* حجم النص أصغر قليلاً */
+}
+
+.boost-meta span {
+    margin-right: 3px; /* مسافة صغيرة بين الليفيل والتكلفة */
+    margin-left: 3px;
+} 
