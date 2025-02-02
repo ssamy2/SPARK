@@ -135,9 +135,7 @@ function renderTopLeader(imageId, nameId, balanceId, rankId, avatar, username, b
 }
 
 
-function truncateUsername(username, maxLength = 7) {
-    return username.length > maxLength ? `${username.slice(0, maxLength)}...` : username;
-}
+
 
 async function updateUserImage(imageElementId) {
     try {
@@ -194,60 +192,7 @@ async function checkAndHandleBan() {
 }
 
 
-function showBanScreen() {
-    const overlay = document.createElement('div');
-    overlay.id = 'banOverlay';
-    overlay.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background-color: rgba(0, 0, 0, 1);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 99999;
-    `;
 
-    const content = document.createElement('div');
-    content.style.cssText = `
-        text-align: center;
-        color: white;
-    `;
-
-    const banImage = document.createElement('img');
-    banImage.src = 'i/bloomer.jpg'; 
-    banImage.alt = 'Banned';
-    banImage.style.cssText = 'width: 170px; margin-bottom: 20px;';
-
-    const banMessage = document.createElement('p');
-    banMessage.textContent = 'Your account has been banned for violating policies If you think this is an error please contact support';
-    banMessage.style.cssText = 'font-size: 17px; margin-bottom: 20px;';
-
-    const contactSupport = document.createElement('button');
-    contactSupport.textContent = 'Contact support';
-    contactSupport.style.cssText = `
-        padding: 10px 30px;
-        background-color: #fff;
-        color: #000;
-        border: none;
-        font-weight: bold;
-        border-radius: 20px;
-        cursor: pointer;
-    `;
-    contactSupport.onclick = () => {
-        window.location.href = 'https://t.me/Dollarsfromtelegram'; 
-    };
-
-    content.appendChild(banImage);
-    content.appendChild(banMessage);
-    content.appendChild(contactSupport);
-    overlay.appendChild(content);
-    document.body.appendChild(overlay);
-
-    document.body.style.overflow = 'hidden';
-}
 async function fetchLeaderboard() {
     try {
         const { data: leaderboard, error } = await supabase
@@ -304,56 +249,6 @@ async function fetchUserRank() {
 function truncateUsername(username, maxLength = 7) {
     return username.length > maxLength ? `${username.slice(0, maxLength)}...` : username;
 }
-
-async function updateUserImage(imageElementId) {
-    try {
-        const avatarUrl = Telegram.WebApp.initDataUnsafe.user.photo_url || 'https://sawcoin.vercel.app/i/users.jpg';
-
-        const imageElement = document.getElementById(imageElementId);
-        if (imageElement) {
-            imageElement.src = avatarUrl;
-            imageElement.onerror = function () {
-                this.src = 'https://sawcoin.vercel.app/i/users.jpg';
-            };
-        }
-    } catch (error) {
-        console.error("Error updating user image:", error);
-    }
-}
-
-
-
-document.addEventListener("DOMContentLoaded", () => {
-    updateUserImage("userDetailsImage");
-    updateUserImage("stingUserImage");   
-});
-async function checkAndHandleBan() {
-    const userId = uiElements.userTelegramIdDisplay.innerText;
-
-    try {
-        const { data, error } = await supabase
-            .from('users')
-            .select('is_banned')
-            .eq('telegram_id', userId)
-            .single();
-
-        if (error) {
-            console.error('Error checking ban status:', error.message);
-            return false;
-        }
-
-        if (data?.is_banned) {
-            showBanScreen(); 
-            return true; 
-        }
-
-        return false; 
-    } catch (err) {
-        console.error('Unexpected error while checking ban status:', err);
-        return false;
-    }
-}
-
 
 function showBanScreen() {
     const overlay = document.createElement('div');
@@ -502,6 +397,12 @@ async function initializeApp() {
         showNotification(uiElements.purchaseNotification, 'Failed to initialize app.');
     }
 }
+
+const leaderboardContainer = document.getElementById('leaderboardContainer');
+const userRankContainer = document.getElementById('userRankContainer');
+const userRankDisplay = document.getElementById('userRank');
+const userUsernameDisplay = document.getElementById('userUsername');
+const userBalanceDisplay = document.getElementById('userBalance');
 
 async function fetchUserDataFromTelegram() {
     try {
