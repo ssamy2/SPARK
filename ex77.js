@@ -293,94 +293,122 @@ async function fetchUserRank() {
     } catch (err) {
         console.error('Error in fetchUserRank:', err.message);
     }
-} 
+}
 
-async function updateLeaderboardDisplay(leaderboard) {
-    document.getElementById('leaderboardContainer').innerHTML = '';
 
-    for (let index = 0; index < leaderboard.length; index++) {
-        const user = leaderboard[index];
-        const avatar = user.username
-            ? `https://t.me/i/userpic/320/${user.username}.svg`
-            : 'https://sawcoin.vercel.app/i/users.jpg';
 
-        const badge = `#${index + 1}`;
 
-        if (index === 0) {
-   
-            renderTopLeader(
-                'firstPlaceImg',
-                'firstPlaceName',
-                'firstPlaceBalance',
-                'firstPlaceRank',
-                avatar,
-                user.username,
-                user.balance,
-                badge,
-                '#2D83EC'
-            );
-        } else if (index === 1) {
-            renderTopLeader(
-                'secondPlaceImg',
-                'secondPlaceName',
-                'secondPlaceBalance',
-                'secondPlaceRank',
-                avatar,
-                user.username,
-                user.balance,
-                badge,
-                'silver'
-            );
-        } else if (index === 2) {
 
-            renderTopLeader(
-                'thirdPlaceImg',
-                'thirdPlaceName',
-                'thirdPlaceBalance',
-                'thirdPlaceRank',
-                avatar,
-                user.username,
-                user.balance,
-                badge,
-                'bronze'
-            );
-        } else if (index >= 3 && index <= 6) {
-            const leaderIds = [
-                'fourthPlace',
-                'fifthPlace',
-                'sixthPlace',
-                'seventhPlace',
-            ];
 
-            const leaderPrefix = leaderIds[index - 3];
-            renderTopLeader(
-                `${leaderPrefix}Img`,
-                `${leaderPrefix}Name`,
-                `${leaderPrefix}Balance`,
-                `${leaderPrefix}Rank`,
-                avatar,
-                user.username,
-                user.balance,
-                badge,
-                '#202020' 
-            );
-        } else {
-            const userRow = document.createElement('div');
-            userRow.classList.add('leaderboard-row');
 
-            userRow.innerHTML = `
-                <img src="${avatar}" alt="Avatar" class="leaderboard-avatar" 
-                    onerror="this.src='https://sawcoin.vercel.app/i/users.jpg';" />
-                <span class="leaderboard-rank">${badge}</span>
-                <span class="leaderboard-username">${truncateUsername(user.username)}</span>
-                <span class="leaderboard-balance">${formatNumber(user.balance)} $SPARK</span>
-            `;
+function truncateUsername(username, maxLength = 7) {
+    return username.length > maxLength ? `${username.slice(0, maxLength)}...` : username;
+}
 
-            document.getElementById('leaderboardContainer').appendChild(userRow);
+async function updateUserImage(imageElementId) {
+    try {
+        const avatarUrl = Telegram.WebApp.initDataUnsafe.user.photo_url || 'https://sawcoin.vercel.app/i/users.jpg';
+
+        const imageElement = document.getElementById(imageElementId);
+        if (imageElement) {
+            imageElement.src = avatarUrl;
+            imageElement.onerror = function () {
+                this.src = 'https://sawcoin.vercel.app/i/users.jpg';
+            };
         }
+    } catch (error) {
+        console.error("Error updating user image:", error);
     }
 }
 
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    updateUserImage("userDetailsImage");
+    updateUserImage("stingUserImage");   
+});
+async function checkAndHandleBan() {
+    const userId = uiElements.userTelegramIdDisplay.innerText;
+
+    try {
+        const { data, error } = await supabase
+            .from('users')
+            .select('is_banned')
+            .eq('telegram_id', userId)
+            .single();
+
+        if (error) {
+            console.error('Error checking ban status:', error.message);
+            return false;
+        }
+
+        if (data?.is_banned) {
+            showBanScreen(); 
+            return true; 
+        }
+
+        return false; 
+    } catch (err) {
+        console.error('Unexpected error while checking ban status:', err);
+        return false;
+    }
+}
+
+
+function showBanScreen() {
+    const overlay = document.createElement('div');
+    overlay.id = 'banOverlay';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 99999;
+    `;
+
+    const content = document.createElement('div');
+    content.style.cssText = `
+        text-align: center;
+        color: white;
+    `;
+
+    const banImage = document.createElement('img');
+    banImage.src = 'i/bloomer.jpg'; 
+    banImage.alt = 'Banned';
+    banImage.style.cssText = 'width: 170px; margin-bottom: 20px;';
+
+    const banMessage = document.createElement('p');
+    banMessage.textContent = 'Your account has been banned for violating policies If you think this is an error please contact support';
+    banMessage.style.cssText = 'font-size: 17px; margin-bottom: 20px;';
+
+    const contactSupport = document.createElement('button');
+    contactSupport.textContent = 'Contact support';
+    contactSupport.style.cssText = `
+        padding: 10px 30px;
+        background-color: #fff;
+        color: #000;
+        border: none;
+        font-weight: bold;
+        border-radius: 20px;
+        cursor: pointer;
+    `;
+    contactSupport.onclick = () => {
+        window.location.href = 'https://t.me/Dollarsfromtelegram'; 
+    };
+
+    content.appendChild(banImage);
+    content.appendChild(banMessage);
+    content.appendChild(contactSupport);
+    overlay.appendChild(content);
+    document.body.appendChild(overlay);
+
+    document.body.style.overflow = 'hidden';
+}
 async function updateGameStateInDatabase(updatedData) {
     const userId = uiElements.userTelegramIdDisplay.innerText;
     if (updatedData.balance === 0 && gameState.balance !== 0) {
